@@ -1,0 +1,36 @@
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width,minimum-scale=1,initial-scale=1')
+    title= title
+    script(src='/js/vue.2.1.4.js')
+    script(src='/js/socketcluster.5.1.1.js')
+  body
+    div(id='app')!= html
+    script(id='scripts')!= script
+    script.
+      function query() {
+        return window.location.search
+          .substr(1)
+          .split('&')
+          .reduce(function(final, each) { 
+            var es = each.split('=')
+            final[es[0]]=es[1]
+            return final
+          }, {})
+      }
+      var html = document.querySelector('#app')
+      var script = document.querySelector('#scripts')
+      var socket = socketCluster.connect()
+      var qs = query()
+
+      var draftChannel = socket.subscribe('DRAFT:' + qs.draftId)
+      draftChannel.watch(function(msg) {
+        try {
+          html.innerHTML = msg.html
+          script.innerHTML = msg.js
+          eval(msg.js)
+        } catch (err) {
+          console.error('Unexception for', msg, err)
+        }
+      })
