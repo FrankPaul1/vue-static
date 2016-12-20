@@ -16,6 +16,7 @@ export function run(worker) {
   app.use(compression())
   app.use(bodyParser.json())
   app.set('view engine', 'pug')
+  app.use('/api', apiRoutes)
 
   if (config.env === 'development') {
     require('./hot-dev/hot-server').init(app)
@@ -23,6 +24,5 @@ export function run(worker) {
   
   app.use(express.static('static'))
   app.use(express.static('build'))
-  app.use('/api', apiRoutes)
 }
 

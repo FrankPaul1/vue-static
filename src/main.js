@@ -7,15 +7,15 @@ import VueRx from 'vue-rx'
 
 import 'element-ui/lib/theme-default/index.css'
 
-import initSocket from './lib/socket'
+import VueSocket from './lib/VueSocket'
 import App from './App'
 import Editor from './components/Editor'
 
-initSocket()
 Vue.use(VueRouter)
 Vue.use(ElementUI)
 Vue.use(VueRx, Rx)
 Vue.use(VueResource)
+Vue.use(VueSocket)
 
 const router = new VueRouter({
   routes: [{
