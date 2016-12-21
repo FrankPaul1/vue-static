@@ -7,21 +7,13 @@
           <i class="el-icon-upload el-icon--right"></i>
         </el-button>
         <el-tabs type="border-card" id="editor">
-          <el-tab-pane label="HTML">
-            <el-input
-              type="textarea"
-              :autosize="{ minRows: 2, maxRows: 4}"
-              placeholder="请输入内容"
-              v-model="html"
-              @input="update">
-            </el-input>
+          <el-tab-pane label="Html">
+            <html-coder :code="html" @changed="updateHtml">
+            </html-coder>
           </el-tab-pane>
           <el-tab-pane label="Script">
-            <coder>
-            </coder>
-          </el-tab-pane>
-          <el-tab-pane label="Script">
-            
+            <js-coder :code="js" @changed="updateJs">
+            </js-coder>
           </el-tab-pane>
         </el-tabs>
 
@@ -36,7 +28,11 @@
 <script>
 import _ from 'lodash'
 import shortId from 'shortid'
-import Coder from './Coder'
+import { JsCoder, CssCoder, HtmlCoder } from './Coder'
+
+function trimCode(code) {
+  return code.trim()
+}
 
 export default {
   name: 'editor',
@@ -62,12 +58,23 @@ export default {
           this.$refs.preview.src = this.$refs.preview.src
         })
     },
-    update: _.debounce(() => {
-      global.$socket.publish(`DRAFT:${this.draftId}`, { js: this.js, html: this.html })
+    updateJs(code) {
+      this.js = trimCode(code)
+      this.publish()
+    },
+    updateHtml(code) {
+      this.html = trimCode(code)
+      this.publish()
+    },
+    publish: _.debounce(function publishCode() {
+      console.log('====', this.js, this.html) // eslint-disable-line
+      this.$socket.publish(`DRAFT:${this.draftId}`, { js: this.js, html: this.html })
     }, 1000),
   },
   components: {
-    Coder,
+    JsCoder,
+    CssCoder,
+    HtmlCoder,
   },
 }
 </script>
