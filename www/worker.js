@@ -16,7 +16,7 @@ export function run(worker) {
   app.use(compression())
   app.use(bodyParser.json())
   app.set('view engine', 'pug')
-  app.use('/api', apiRoutes)
+  app.use('/api', apiRoutes(scServer))
 
   if (config.env === 'development') {
     require('./hot-dev/hot-server').init(app)

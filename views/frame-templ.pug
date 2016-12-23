@@ -7,7 +7,7 @@ html
     script(src='/js/socketcluster.5.1.1.js')
   body
     div(id='app')!= html
-    script(id='scripts')!= script
+    script(id='scripts')!= js
     script.
       function query() {
         return window.location.search
@@ -26,11 +26,12 @@ html
 
       var draftChannel = socket.subscribe('DRAFT:' + qs.draftId)
       draftChannel.watch(function(msg) {
-        try {
-          html.innerHTML = msg.html
-          script.innerHTML = msg.js
-          eval(msg.js)
-        } catch (err) {
-          console.error('Unexception for', msg, err)
-        }
+        window.location.href = window.location.href
+        //- try {
+        //-   html.innerHTML = msg.html
+        //-   script.innerHTML = msg.js
+        //-   eval(msg.js)
+        //- } catch (err) {
+        //-   console.error('Unexception for', msg, err)
+        //- }
       })

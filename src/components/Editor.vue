@@ -67,8 +67,8 @@ export default {
       this.publish()
     },
     publish: _.debounce(function publishCode() {
-      console.log('====', this.js, this.html) // eslint-disable-line
       this.$socket.publish(`DRAFT:${this.draftId}`, { js: this.js, html: this.html })
+      // this.$refs.preview.src = this.$refs.preview.src
     }, 1000),
   },
   components: {
